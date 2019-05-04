@@ -4,10 +4,13 @@ import os
 import pickle
 
 from collections import defaultdict
-from heapq import nlargest
+from heapq import nsmallest
 
-class Bayes():
-    def __init__(self,train_fname = "train.csv",test_fname = "test.csv",targets = ['none','soft','hard'],calibrate = False):
+class Bayeslearner:
+    def __init__(self,train_fname = "train.csv",
+                 test_fname = "test.csv",
+                 targets = ['none','soft','hard'],
+                 calibrate = False):
         self.train_data = pd.read_csv(train_fname)
         self.test_data = pd.read_csv(test_fname)
         self.target = targets
@@ -30,15 +33,17 @@ class Bayes():
 
         for tar in targets:
             self.P_x[tar] = self.construct()
+            print(self.P_x[tar])
             for i,col in enumerate(self.columns):
                 if(i == len(self.columns)-1): #The last column is only for prediction
                     break
                 self.train(tar,col)
 
-
         for i in range(0,len(self.test_data)):
             temp = self.predict(self.test_data[i:i+1])
             self.res.append(temp)
+
+        pd.DataFrame({"result":self.res}).to_csv("Bayes_result.csv")
 
         self.showTrainResult()
 
@@ -51,6 +56,7 @@ class Bayes():
             dic[item] = {}
             for each in keys:
                 dic[item][each] = 0
+        return dic
 
     def train(self,target,column):
         #Select data with a specific target
@@ -80,11 +86,11 @@ class Bayes():
             #Here we use the column name indirectly
             for i,each in enumerate(item[0]):
                 probability[key] *= self.P_x[key][self.columns[i]][each]
+            probability[key] *= self.P_y[key]
         print(probability)
         res = max(probability,key=probability.get)
         print(res)
         return res
-
 
     def showTrainResult(self):
         print("===============RESULT===============")
@@ -98,7 +104,7 @@ class Bayes():
         print("Prediction result: ")
         print(self.res)
 
-class Knn:
+class knnclassifier :
     def __init__(self,train_fname = "train.csv",
                  test_fname = "test.csv",
                  code_fname = "code.pkl",
@@ -130,8 +136,9 @@ class Knn:
         for each in self.test_data:
             self.pred.append(self.findBest(self.predict(each[:-1])))
 
-        print(self.pred)
+        pd.DataFrame({"result": self.pred}).to_csv("Knn_result.csv")
 
+        print(self.pred)
 
     def encode(self):
         for i,each in enumerate(self.columns):
@@ -174,7 +181,7 @@ class Knn:
         k_largest = []
         for each in self.train_data:
             dist.append(self.distance(code,each[:-1]))
-        k_largest = list(map(dist.index,nlargest(self.k,dist)))
+        k_largest = list(map(dist.index,nsmallest(self.k,dist)))
         #print(dist)
         #print(k_largest)
         res = []
@@ -193,18 +200,17 @@ class Knn:
             m[each] += 1
         return max(m,key=m.get)
 
-
-
     def show_encode(self):
-        for each in test.train_data:
+        for each in self.train_data:
             print(each)
-        for each in test.test_data:
+        for each in self.test_data:
             print(each)
         print("The code dictionary:\n")
         print(self.codes)
 
-test = Bayes()
-test = Knn()
+if __name__ == "__main__":
+    Bayeslearner()
+    knnclassifier()
 
 
 
