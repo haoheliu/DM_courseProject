@@ -1,0 +1,7 @@
+age,spectacle-prescrip,astigmatism,tear-prod-rate,contact-lenses
+young,myope,yes,reduced,?
+young,hypermetrope,no,reduced,?
+pre-presbyopic,myope,no,normal,?
+pre-presbyopic,myope,yes,normal,?
+presbyopic,myope,yes,reduced,?
+presbyopic,hypermetrope,no,normal,?
