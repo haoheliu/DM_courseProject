@@ -10,7 +10,7 @@ class Bayeslearner:
     def __init__(self,train_fname = "train.csv",
                  test_fname = "test.csv",
                  targets = ['none','soft','hard'],
-                 calibrate = False):
+                 calibrate = True):
         self.train_data = pd.read_csv(train_fname)
         self.test_data = pd.read_csv(test_fname)
         self.target = targets
@@ -45,7 +45,7 @@ class Bayeslearner:
 
         pd.DataFrame({"result":self.res}).to_csv("Bayes_result.csv")
 
-        self.showTrainResult()
+        #self.showTrainResult()
 
     def construct(self)->dict:
         dic = {}
@@ -137,7 +137,7 @@ class knnclassifier :
             self.pred.append(self.findBest(self.predict(each[:-1])))
 
         pd.DataFrame({"result": self.pred}).to_csv("Knn_result.csv")
-
+        self.show_encode()
         print(self.pred)
 
     def encode(self):
