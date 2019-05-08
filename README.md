@@ -2,7 +2,7 @@
 
 ## Data mining cource experiment of NWPU
 
-### 2.5：
+### 2.5
 
 We implemented a simple Bayes and Knn classifier to do classification based on the data set provided 
 
