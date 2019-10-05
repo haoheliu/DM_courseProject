@@ -1,5 +1,7 @@
 # DM_courseProject
 
+**Details of this task please refer to "./Reports" directory for more detailed reports**
+
 ## Data mining cource experiment of NWPU
 
 ### 2.5
